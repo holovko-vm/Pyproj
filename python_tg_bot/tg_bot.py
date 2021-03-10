@@ -7,50 +7,32 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Callb
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
 )
-
+token = "1602418380:AAGfEIP4Z4rZEZieQjueQNWf_C0r7FW0h_A"
 logger = logging.getLogger(__name__)
+class My_tg_bot:
+    def __init__(self, token):
+        self.updater = Updater(token=token)
+        self.dispatcher = self.updater.dispatcher
+
+    def commands(self, update: Update, context: CallbackContext) -> None:
+        """Send a message when the command /start is issued."""
+        update.message.reply_text(f'принято команду - {update.message.text}')
+
+    def echo(self, update: Update, context: CallbackContext) -> None:
+        """Echo the user message."""
+        update.message.reply_text(update.message.text)
+
+    def add_handlers(self, command):
+        self.dispatcher.add_handler(CommandHandler(f'{command}', self.commands))
+        self.dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, self.echo))
 
 
-# Define a few command handlers. These usually take the two arguments update and
-# context. Error handlers also receive the raised TelegramError object in error.
-def start(update: Update, context: CallbackContext) -> None:
-    """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi!')
 
-
-def help_command(update: Update, context: CallbackContext) -> None:
-    """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
-
-
-def echo(update: Update, context: CallbackContext) -> None:
-    """Echo the user message."""
-    update.message.reply_text(update.message.text)
-
-
-def main():
-    """Start the bot."""
-    # Create the Updater and pass it your bot's token.
-    updater = Updater("1602418380:AAGfEIP4Z4rZEZieQjueQNWf_C0r7FW0h_A")
-
-    # Get the dispatcher to register handlers
-    dispatcher = updater.dispatcher
-
-    # on different commands - answer in Telegram
-    dispatcher.add_handler(CommandHandler("start", start))
-    dispatcher.add_handler(CommandHandler("help", help_command))
-
-    # on noncommand i.e message - echo the message on Telegram
-    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
-
-    # Start the Bot
-    updater.start_polling()
-
-    # Run the bot until you press Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
-    updater.idle()
-
+    def run(self):
+        self.add_handlers(command='start')
+        self.updater.start_polling()
+        self.updater.idle()
 
 if __name__ == '__main__':
-    main()
+    bot = My_tg_bot(token=token)
+    bot.run()
