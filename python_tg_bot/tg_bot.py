@@ -8,18 +8,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 # TODO написати коректне логування і тести
-# def echo(update: Update, context: CallbackContext) -> None:
-#     """Ехо-відповідь користувачу"""
-#     update.message.reply_text(update.message.text)
-#
-# def commands(update: Update, context: CallbackContext) -> None:
-#     """Список використовуваних ботом команд"""
-#     update.message.reply_text(f'Список доступних команд - {COMMAND_LIST}')
-#
-# def kill(update: Update, context: CallbackContext) -> None:
-#     """Фан-функція, формат виклику /kill 'name' """
-#     update.message.reply_text(f'We will kill {update.message.text[6:]} for you')
-
 
 """Список використовуваних ботом функцій """
 COMMAND_LIST = ['kill', 'commands', 'echo']
