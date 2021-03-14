@@ -1,12 +1,12 @@
 import logging
-from token import token
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
-
+from token_bot import token
 # Enable logging
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
 )
+
 
 def echo(update: Update, context: CallbackContext) -> None:
     """Ехо-відповідь користувачу"""
@@ -28,13 +28,13 @@ class My_tg_bot:
         self.updater = Updater(token=token)
         self.dispatcher = self.updater.dispatcher
 
-    def add_handlers(self, args):
+    def add_handlers(self, command):
         try:
-            if args == 'echo':
+            if command == 'echo':
                 self.dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
                 return
-            _ = eval(args)
-            self.dispatcher.add_handler(CommandHandler(args, _))
+            _ = eval(command)
+            self.dispatcher.add_handler(CommandHandler(command, _))
         except NameError as namerr:
             print(f'Отсутствует такая функция {namerr}')
 
