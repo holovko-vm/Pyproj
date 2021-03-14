@@ -22,10 +22,6 @@ class My_tg_bot:
         self.updater = Updater(token=token)
         self.dispatcher = self.updater.dispatcher
 
-
-
-
-
     def echo(self, update: Update, context: CallbackContext) -> None:
         """Echo the user message."""
         update.message.reply_text(update.message.text)
