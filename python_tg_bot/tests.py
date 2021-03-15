@@ -1,28 +1,21 @@
-import  unittest
+import unittest
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
-from unittest import  TestCase
-from unittest.mock import patch
+from unittest import TestCase
+from unittest.mock import patch, Mock
 from unittest import mock
 import python_tg_bot
 from python_tg_bot import tg_bot, bot_commands
+from tg_bot import My_tg_bot
 
-
-# class Test(TestCase):
-#     def test1(self):
-#         with patch('tg_bot.Updater'):
-#             bot = tg_bot.My_tg_bot('')
-#             bot.run()
-
-def givno(args):
-    for _ in range(len(args)):
-        args[_]+=1
-    return args
 
 class Test(TestCase):
-    def test_ok(self):
-        kil = givno([1,2,3,4])
-        self.assertEqual(kil,[2,3,4,5])
+    def test_run(self):
+        with patch('tg_bot.Updater'):
+            bot = My_tg_bot('')
+            bot.add_handlers = Mock()
+            bot.run(args=[])
+
 
 
 if __name__ == '__main__':
