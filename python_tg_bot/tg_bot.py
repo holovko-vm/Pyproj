@@ -2,6 +2,8 @@ import logging
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 import bot_commands
+import sys
+from token_bot import token
 
 """Додаємо логування"""
 logging.basicConfig(
@@ -14,7 +16,7 @@ logging.debug(f'Стартуємо з функціями {bot_commands.COMMAND_L
 
 
 class My_tg_bot:
-    def __init__(self, token):
+    def __init__(self, token = 'qwerty123456789'):
         """Створюємо Об'єкт, що слідкує за новинами,
         Вставте токен Вашого бота token_bot.py.default --> token_bot.py >>token = 'Токен Вашого бота'
         """
@@ -47,8 +49,8 @@ class My_tg_bot:
 
 
 if __name__ == '__main__':
-    import toml
-    conf = toml.load(sys.argv[1])
-    bot = My_tg_bot(token=conf["token"])
+    # import toml
+    # conf = toml.load(sys.argv[0])
+    bot = My_tg_bot(token=token)
     """Запускаємо бота та передаємо йому список команд, які буде використовувати бот"""
-    bot.run(COMMAND_LIST)
+    bot.run(bot_commands.COMMAND_LIST)
