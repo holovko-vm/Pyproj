@@ -1,7 +1,6 @@
 import logging
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
-from token_bot import token
 import bot_commands
 
 """Додаємо логування"""
@@ -44,6 +43,8 @@ class My_tg_bot:
         self.updater.idle()
 
 if __name__ == '__main__':
-    bot = My_tg_bot(token=token)
+    import toml
+    conf = toml.load(sys.argv[1])
+    bot = My_tg_bot(token=conf["token"])
     """Запускаємо бота та передаємо йому список команд, які буде використовувати бот"""
     bot.run(COMMAND_LIST)
