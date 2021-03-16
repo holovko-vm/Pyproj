@@ -14,8 +14,12 @@ class Test(TestCase):
         with patch('tg_bot.Updater'):
             bot = My_tg_bot('')
             bot.add_handlers = Mock()
-            bot.run(args=['','','','',''])
-            assert bot.add_handlers.call_count ==5
+            call_count = 5
+            call_count_list = []
+            for _ in range(call_count):
+                call_count_list.append('')
+            bot.run(args=call_count_list)
+            assert bot.add_handlers.call_count == 5
 
 
 
