@@ -16,6 +16,7 @@ class Test(TestCase):
             bot.add_handlers = Mock()
             call_count = 5
             call_count_list = []
+            '''Перевіряємо, чи дійсно run викликає функцію створення Хендлерів'''
             for _ in range(call_count):
                 call_count_list.append('')
             bot.run(args=call_count_list)
@@ -28,19 +29,25 @@ class Test(TestCase):
             result_call = 0
             for _ in range(call_count):
                 bot.add_handlers(command='')
+                '''Якщо тут нема помилки, то значить Хендлер додано'''
                 result_call += 1
-            # print(bot.dispatcher.handlers) ''' <<<<<< Ця штука повертає дікт хендлерів(в нормальних умовах),
-            # і в ідеалі б після створення хендлерів перевіряти чи вони дійсно створились, але через те, що створюється наш клас
-            # об єктом MagikMock, цей дікт перетворюється на об єкт MagikMock.
-            # Поки бачу 3 варіанти вирішення цього питання:
-            # 1) Залишити як зараз є, раз створюється і нема помилки, то все ок
-            # 2) не робити моком клас і тоді дікт буде повертатися і можна буде перевірити його на правильність роботи
-            # 3) найскладніший - Після створення хендлерів перевіряти чи працюють вони(але напевно це зайве в рамках юніттестів)
-            # Поки думаю, що другий найвалідніший, а ти?
-            # розумію що можуть бути і інші варіанти, але це ті, що мені в голову прийшли
-            # Можливо є якісь фічі, які могли б перевірити чи справді воно додало хендлери?'''
             self.assertEqual(call_count, result_call)
 
+    def test_handlers2(self):
+        COMMAND_LIST = ['kill', 'commands', 'echo']
+        '''Тут несправжній токен'''
+        bot = My_tg_bot(token='1644418380:AAGfEIP4Z4rZEZieQjueQNWf_C0r7FW0h_A')
+        call_count = 1
+        '''Створюємо Хендлери'''
+        for _ in COMMAND_LIST:
+            call_count += 1
+            bot.add_handlers(command=f'{_}')
+        '''Визначаємо кількість створених Хендлерів'''
+        result = 1
+        for _ in bot.updater.dispatcher.handlers[0]:
+            result += 1
+        '''Перевіряємо кількості вискликаних і створених Хендлерів'''
+        self.assertEqual(result, call_count)
 
 if __name__ == '__main__':
     unittest.main()

@@ -16,7 +16,7 @@ logging.debug(f'Стартуємо з функціями {bot_commands.COMMAND_L
 
 
 class My_tg_bot:
-    def __init__(self, token = 'qwerty123456789'):
+    def __init__(self, token):
         """Створюємо Об'єкт, що слідкує за новинами,
         Вставте токен Вашого бота token_bot.py.default --> token_bot.py >>token = 'Токен Вашого бота'
         """
