@@ -43,7 +43,6 @@ class Test_add_handler(TestCase):
             bot.add_handlers(command=f'{_}')
         '''Визначаємо кількість створених Хендлерів'''
         result = 1
-        print(bot.updater.dispatcher.handlers[0])
         for _ in bot.updater.dispatcher.handlers[0]:
             result += 1
         '''Перевіряємо кількості вискликаних і створених Хендлерів'''
