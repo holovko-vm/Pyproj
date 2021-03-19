@@ -4,4 +4,6 @@ token_bot.py
 tg_bot.log
 
 __pycache__
+.coverage
+htmlcov
 .vscode

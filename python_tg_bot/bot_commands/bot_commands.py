@@ -1,9 +1,6 @@
 from telegram import Update
 from telegram.ext import CallbackContext
-
-
-"""Список використовуваних ботом функцій """
-COMMAND_LIST = ['kill', 'commands', 'echo', 'givno']
+from telegram.ext import CommandHandler, MessageHandler, Filters, CallbackContext
 
 
 def echo(update: Update, context: CallbackContext) -> None:

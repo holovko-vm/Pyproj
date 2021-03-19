@@ -1,0 +1,7 @@
+python -m unittest .\tests.py
+
+coverage run -m unittest
+
+coverage html
+
+created folderr htmlcov
