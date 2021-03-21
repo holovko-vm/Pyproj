@@ -1,6 +1,6 @@
 from telegram import Update
+
 from telegram.ext import CallbackContext
-from telegram.ext import CommandHandler, MessageHandler, Filters, CallbackContext
 
 
 def echo(update: Update, context: CallbackContext) -> None:

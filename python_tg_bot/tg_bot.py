@@ -1,5 +1,5 @@
 import logging
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from telegram.ext import Updater
 from bot_commands import COMMAND_LIST, COMMAND_DICT
 import exeptions
 import sys
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     bot = My_tg_bot(token=token)
     """Запускаємо бота та передаємо йому список команд, які буде використовувати бот"""
     try:
-        bot.run(bot_commands.COMMAND_LIST)
+        bot.run(COMMAND_LIST)
     except exeptions.CommandNotExist as err:
         logging.error(
             f'error: {err}')
