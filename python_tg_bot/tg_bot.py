@@ -12,8 +12,6 @@ logging.basicConfig(
 )
 
 
-
-
 logging.debug(f'Стартуємо з функціями {bot_commands.COMMAND_LIST}')
 
 
