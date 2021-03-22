@@ -1,8 +1,8 @@
 import logging
-from telegram.ext import Updater
-from bot_commands import COMMAND_LIST, COMMAND_DICT
-import exeptions
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+import bot_commands
 import sys
+from token_bot import token
 
 """Додаємо логування"""
 logging.basicConfig(
@@ -11,44 +11,48 @@ logging.basicConfig(
     handlers=[logging.FileHandler('tg_bot.log', 'w', 'utf-8')]
 )
 
-logging.debug(f'Стартуємо з функціями {COMMAND_LIST}')
+
+
+
+logging.debug(f'Стартуємо з функціями {bot_commands.COMMAND_LIST}')
 
 
 class My_tg_bot:
-    def __init__(self, token, commands_dict=COMMAND_DICT):
+    def __init__(self, token):
         """Створюємо Об'єкт, що слідкує за новинами,
         Вставте токен Вашого бота token_bot.py.default --> token_bot.py >>token = 'Токен Вашого бота'
         """
         self.updater = Updater(token=token)
         """Створюємо Об'єкт, який направляє новину відповідному обробнику"""
         self.dispatcher = self.updater.dispatcher
-        self.commands_dict = commands_dict
+
+    """Метод створення обробників згідно списку команд з COMMAND_LIST"""
 
     def add_handlers(self, command):
-        """Метод створення обробників згідно списку команд з COMMAND_LIST"""
-        cmd = self.commands_dict.get(command, None)
-        if cmd is None:
-            raise exeptions.CommandNotExist(command)
-        self.dispatcher.add_handler(cmd)
+        try:
+            if command == 'echo':
+                self.dispatcher.\
+                    add_handler(MessageHandler(
+                        Filters.text & ~Filters.command, getattr(bot_commands, 'echo')))
+                return
+            self.dispatcher.add_handler(CommandHandler(
+                command, getattr(bot_commands, command)))
+        except AttributeError:
+            logging.error(
+                f'Невідома функція - {command}, додайте її до файлу bot_commands.py')
 
-    def run(self, command_names):
+    def run(self, args):
         """Створюємо обробників"""
-        for name in command_names:
-            self.add_handlers(name)
-
+        for _ in args:
+            self.add_handlers(_)
         """Слухаємо сервер"""
         self.updater.start_polling()
         self.updater.idle()
 
 
 if __name__ == '__main__':
-    from token_bot import token
     # import toml
     # conf = toml.load(sys.argv[0])
     bot = My_tg_bot(token=token)
     """Запускаємо бота та передаємо йому список команд, які буде використовувати бот"""
-    try:
-        bot.run(COMMAND_LIST)
-    except exeptions.CommandNotExist as err:
-        logging.error(
-            f'error: {err}')
+    bot.run(bot_commands.COMMAND_LIST)
