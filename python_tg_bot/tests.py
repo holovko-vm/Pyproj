@@ -1,11 +1,6 @@
 import unittest
-from telegram import Update
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 from unittest import TestCase
 from unittest.mock import patch, Mock
-from unittest import mock
-import python_tg_bot
-from python_tg_bot import tg_bot, bot_commands
 from tg_bot import My_tg_bot
 
 

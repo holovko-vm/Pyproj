@@ -5,7 +5,6 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Callb
 """Список використовуваних ботом функцій """
 COMMAND_LIST = ['kill', 'commands', 'echo', 'givno']
 
-
 def echo(update: Update, context: CallbackContext) -> None:
     """Ехо-відповідь користувачу"""
     update.message.reply_text(update.message.text)

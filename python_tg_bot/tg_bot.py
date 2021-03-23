@@ -1,8 +1,6 @@
 import logging
-from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 import bot_commands
-import sys
 from token_bot import token
 
 
