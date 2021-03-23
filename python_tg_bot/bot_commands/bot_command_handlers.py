@@ -8,6 +8,7 @@ def echo(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(update.message.text)
 
 
+
 def commands(update: Update, context: CallbackContext) -> None:
     """Повертає список використовуваних ботом команд"""
     update.message.reply_text(f'Список доступних команд - {COMMAND_LIST}')
