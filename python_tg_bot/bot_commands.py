@@ -1,9 +1,8 @@
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
-
-"""Список використовуваних ботом функцій """
-COMMAND_LIST = ['kill', 'commands', 'echo', 'givno']
+command_funtions =['kill','commands']
+message_functions =['echo']
 
 def echo(update: Update, context: CallbackContext) -> None:
     """Ехо-відповідь користувачу"""
@@ -12,7 +11,7 @@ def echo(update: Update, context: CallbackContext) -> None:
 
 def commands(update: Update, context: CallbackContext) -> None:
     """Повертає список використовуваних ботом команд"""
-    update.message.reply_text(f'Список доступних команд - {COMMAND_LIST}')
+    update.message.reply_text(f'Список доступних команд - {command_funtions}')
 
 
 def kill(update: Update, context: CallbackContext) -> None:
