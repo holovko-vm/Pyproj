@@ -4,19 +4,12 @@ import bot_commands
 from token_bot import token
 
 
-
-
 """Додаємо логування"""
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', datefmt='%d.%m.%Y %I:%M',
     level=logging.INFO,
     handlers=[logging.FileHandler('tg_bot.log', 'w', 'utf-8')]
 )
-
-
-
-
-
 logging.debug(f'Стартуємо з функціями {bot_commands.COMMAND_LIST}')
 
 
