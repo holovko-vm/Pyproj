@@ -29,10 +29,9 @@ class My_tg_bot:
         self.dispatcher = self.updater.dispatcher
 
     """Метод створення обробників згідно списку команд з COMMAND_LIST"""
-#TODO розділити меседж хендлери і команд
 #TODO меседж хендлери мають бути з фільтрами, щоб при створенні меседжхендлера він 
 # створювався з відповідним йому фільтром
-#TODO прописати в бот командс сценарій
+#TODO прописати сценарій в меседж хендлер
     def add_command_handlers(self, commands=None):
         for command in commands:
             try:
