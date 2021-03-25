@@ -15,3 +15,6 @@ def kill(update: Update, context: CallbackContext) -> None:
     else:
         update.message.reply_text(
             f'We will kill {update.message.text[6:]} for you')
+
+def registration(update: Update, context: CallbackContext) -> None:
+    pass

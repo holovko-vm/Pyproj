@@ -13,11 +13,7 @@ logging.basicConfig(
     handlers=[logging.FileHandler('tg_bot.log', 'w', 'utf-8')]
 )
 """Список використовуваних ботом функцій """
-COMMAND_DICT = {}
-COMMAND_DICT['command_functions'] = command_functions_list
-COMMAND_DICT['message_functions'] = message_functions_dict
-logging.debug(f'Стартуємо з функціями {COMMAND_DICT}')
-
+'''message_functions_dict, command_functions_list'''
 
 class My_tg_bot:
     def __init__(self, token):
@@ -27,11 +23,11 @@ class My_tg_bot:
         self.updater = Updater(token=token)
         """Створюємо Об'єкт, який направляє новину відповідному обробнику"""
         self.dispatcher = self.updater.dispatcher
-
-    """Метод створення обробників згідно списку команд з COMMAND_LIST"""
+        self.user_state = dict()
 
 #TODO прописати сценарій в новий меседж хендлер
     def add_command_handlers(self, commands=None):
+        """Метод створення обробників згідно списку команд з COMMAND_LIST"""
         for command in commands:
             try:
                 self.dispatcher.add_handler(CommandHandler(
