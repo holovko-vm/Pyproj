@@ -30,7 +30,7 @@ class My_tg_bot:
 
     """Метод створення обробників згідно списку команд з COMMAND_LIST"""
 
-#TODO прописати сценарій в меседж хендлер
+#TODO прописати сценарій в новий меседж хендлер
     def add_command_handlers(self, commands=None):
         for command in commands:
             try:
