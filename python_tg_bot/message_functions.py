@@ -9,7 +9,6 @@ def echo(update: Update, context: CallbackContext) -> None:
     update.message.reply_text(update.message.text)
 
 def echo_for_meeting(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text(f'{update.message.text} + ти рак')
     _date = '15 квітня'
     _time = '10 ранку'
     _location = 'Виставковому центрі, павільйон 1А'
@@ -23,3 +22,11 @@ def echo_for_meeting(update: Update, context: CallbackContext) -> None:
         'answer': f'Конференція проводиться в {_location}'
         },
         ]
+    DEFAULT_ANSWER = 'Поки не знаю як Вам відповісти, але я можу відповісти на питання де і коли відбудеться виставка'
+    for _ in _INTENT:
+        for token in _['tokens']:
+            if token in str.lower(update.message.text):
+                update.message.reply_text(_['answer'])
+                return
+    else:
+        update.message.reply_text(DEFAULT_ANSWER)
