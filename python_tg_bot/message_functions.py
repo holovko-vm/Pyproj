@@ -1,8 +1,9 @@
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+import re
 
 '''фільтри для хендлерів знаходяться в модулі {Filters}'''
-message_functions_dict ={'echo_for_meeting': Filters.text & ~Filters.command}
+message_functions_dict ={'echo_regist': Filters.text & ~Filters.command}
 
 def echo(update: Update, context: CallbackContext) -> None:
     """Ехо-відповідь користувачу"""
@@ -30,3 +31,34 @@ def echo_for_meeting(update: Update, context: CallbackContext) -> None:
                 return
     else:
         update.message.reply_text(DEFAULT_ANSWER)
+     
+def echo_regist(update: Update, context: CallbackContext) -> None:
+    user_state = 0
+    print(f'{user_state}'*5)
+    regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
+    if user_state == 0:
+        update.message.reply_text('Введіть email')
+        user_state = 1
+        user_email = update.message.text
+        print(user_email)
+        if re.search(regex, user_email):
+            user_state = 2
+        else:
+            user_state = 0
+        print(f'{user_state}')
+    print(f'{user_state}'*10)
+    if user_state == 2:
+        update.message.reply_text('Введіть password')
+        if len(update.message.text)>=8:
+            update.message.text = probe_pass
+            update.message.text = None
+            user_state = 3
+    if user_state == 4:       
+        update.message.reply_text('Підтвердіть password')       
+        if update.message.text == probe_pass:
+            update.message.text = password
+            update.message.reply_text('Реєстрація успішна!')
+            with open(file='python_tg_bot\\data_base.txt', mode='a', encoding='utf-8') as file:
+                file.write(f'{user_email} : {password},')
+            
+                

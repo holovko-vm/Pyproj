@@ -23,8 +23,6 @@ class My_tg_bot:
         self.updater = Updater(token=token)
         """Створюємо Об'єкт, який направляє новину відповідному обробнику"""
         self.dispatcher = self.updater.dispatcher
-        self.user_state = dict()
-
 #TODO прописати сценарій в новий меседж хендлер
     def add_command_handlers(self, commands=None):
         """Метод створення обробників згідно списку команд з COMMAND_LIST"""
