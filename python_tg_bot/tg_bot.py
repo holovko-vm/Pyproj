@@ -1,19 +1,13 @@
-import logging
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
-from token_bot import token
-import command_functions
-import message_functions
-from message_functions import message_functions_dict
 from command_functions import command_functions_list
+from message_functions import message_functions_dict
+import message_functions
+import command_functions
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
-"""Додаємо логування"""
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', datefmt='%d.%m.%Y %I:%M',
-    level=logging.INFO,
-    handlers=[logging.FileHandler('tg_bot.log', 'w', 'utf-8')]
-)
+
 """Список використовуваних ботом функцій """
 '''message_functions_dict, command_functions_list'''
+
 
 class My_tg_bot:
     def __init__(self, token):
@@ -23,7 +17,8 @@ class My_tg_bot:
         self.updater = Updater(token=token)
         """Створюємо Об'єкт, який направляє новину відповідному обробнику"""
         self.dispatcher = self.updater.dispatcher
-#TODO прописати сценарій в новий меседж хендлер
+# TODO прописати сценарій в новий меседж хендлер
+
     def add_command_handlers(self, commands=None):
         """Метод створення обробників згідно списку команд з COMMAND_LIST"""
         for command in commands:
@@ -38,12 +33,14 @@ class My_tg_bot:
         for message_function, filter in message_handlers.items():
             try:
                 self.dispatcher.\
-                    add_handler(MessageHandler(filter, getattr(message_functions, message_function)))
+                    add_handler(MessageHandler(filter, getattr(
+                        message_functions, message_function)()
+                    ))
             except AttributeError:
                 logging.error(
                     f'Невідома функція - {message_function}, додайте її до файлу bot_commands.py')
 
-    def run(self, command_handlers = None, message_handlers = None):
+    def run(self, command_handlers=None, message_handlers=None):
         """Створюємо обробників"""
         self.add_message_handlers(message_handlers)
         self.add_command_handlers(command_handlers)
@@ -57,4 +54,5 @@ if __name__ == '__main__':
     # conf = toml.load(sys.argv[0])
     bot = My_tg_bot(token=token)
     """Запускаємо бота та передаємо йому список команд, які буде використовувати бот"""
-    bot.run(command_handlers=command_functions_list, message_handlers=message_functions_dict)
+    bot.run(command_handlers=command_functions_list,
+            message_handlers=message_functions_dict)
