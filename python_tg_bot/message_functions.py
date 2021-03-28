@@ -16,7 +16,7 @@ def echo_for_meeting(users_ctx, **kwargs):
     password = None
     user_email = None
     re_email = re.compile('^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$')
-
+# TODO прописати вихід зі сценарію якщо того хоче користувач
     def echo_for_meeting(update: Update, context: CallbackContext) -> None:
         if users_ctx['user_state'] == 0:
             _date = '15 квітня'
