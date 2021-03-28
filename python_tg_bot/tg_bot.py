@@ -17,6 +17,7 @@ class My_tg_bot:
         self.updater = Updater(token=token)
         """Створюємо Об'єкт, який направляє новину відповідному обробнику"""
         self.dispatcher = self.updater.dispatcher
+        self.users_ctx = {'user_state': 0}
 # TODO прописати сценарій в новий меседж хендлер
 
     def add_command_handlers(self, commands=None):
@@ -24,7 +25,7 @@ class My_tg_bot:
         for command in commands:
             try:
                 self.dispatcher.add_handler(CommandHandler(
-                    command, getattr(command_functions, command)))
+                    command, getattr(command_functions, command)(users_ctx=self.users_ctx)))
             except AttributeError:
                 logging.error(
                     f'Невідома функція - {command}, додайте її до файлу bot_commands.py')
@@ -34,7 +35,7 @@ class My_tg_bot:
             try:
                 self.dispatcher.\
                     add_handler(MessageHandler(filter, getattr(
-                        message_functions, message_function)()
+                        message_functions, message_function)(users_ctx=self.users_ctx)
                     ))
             except AttributeError:
                 logging.error(
