@@ -48,12 +48,3 @@ class My_tg_bot:
         """Слухаємо сервер"""
         self.updater.start_polling()
         self.updater.idle()
-
-
-if __name__ == '__main__':
-    # import toml
-    # conf = toml.load(sys.argv[0])
-    bot = My_tg_bot(token=token)
-    """Запускаємо бота та передаємо йому список команд, які буде використовувати бот"""
-    bot.run(command_handlers=command_functions_list,
-            message_handlers=message_functions_dict)

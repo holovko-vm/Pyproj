@@ -4,7 +4,7 @@ import re
 
 regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
 
-command_functions_list = ['kill', 'commands', 'registration']
+command_functions_list = ['kill', 'commands', 'registration', 'out']
 
 
 def commands(**kwargs):
@@ -30,7 +30,16 @@ def kill(**kwargs):
 
 def registration(users_ctx, **kwargs):
 
-    def echo_regist_1(update: Update, context: CallbackContext) -> None:
+    def registration(update: Update, context: CallbackContext) -> None:
         users_ctx['user_state'] = 1
-        update.message.reply_text('Введіть email')
-    return echo_regist_1
+        update.message.reply_text('Процедуру реєстрації запущено,'+
+        'для виходу з реєстрації, скористайтесь командою /out')
+        update.message.reply_text('Для продовження реєстрації введіть email')
+    return registration
+
+def out(users_ctx, **kwargs):
+
+    def out(update: Update, context: CallbackContext) -> None:
+        users_ctx['user_state'] = 0
+        update.message.reply_text('Реєстрацію відмінено!')
+    return out
