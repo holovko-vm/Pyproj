@@ -18,7 +18,7 @@ class My_tg_bot:
         self.updater = Updater(token=token)
         """Створюємо Об'єкт, який направляє новину відповідному обробнику"""
         self.dispatcher = self.updater.dispatcher
-        self.users_ctx = {'user_state': 0}
+        self.users_ctx = {'user_state': 0, 'user_handler':0}
 # TODO прописати стейти для кожного користувача по його ід
 
     def add_command_handlers(self, commands=None):
