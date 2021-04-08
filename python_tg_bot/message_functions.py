@@ -8,6 +8,9 @@ message_functions_dict = {'user_message_handler': Filters.text & ~Filters.comman
 def echo(update,context,givno):
     """Ехо-відповідь користувачу"""
     return update.message.reply_text(update.message.text)
+def echo_2(update,context):
+    """Ехо-відповідь користувачу"""
+    return update.message.reply_text('ха-ха бидлокод, моя взяла')
     
 def user_message_handler(users_ctx, **kwargs):  
     def user_message_handler(update= Update, context= CallbackContext, user_ctx=users_ctx, *args, **kwargs):
@@ -16,7 +19,7 @@ def user_message_handler(users_ctx, **kwargs):
         if user_ctx['user_handler']==1:
             echo(update=update, context=context, givno=1)
         if user_ctx['user_handler']==0:
-            echo_for_meeting(update=update, context=context)
+            echo_2(update=update, context=context)
         print('і тута')
     return user_message_handler
 
