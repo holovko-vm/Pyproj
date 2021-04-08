@@ -3,8 +3,10 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Callb
 import re
 
 '''фільтри для хендлерів знаходяться в модулі {Filters}'''
-message_functions_dict = {'echo_for_meeting': Filters.text & ~Filters.command}
+message_functions_dict = {'user_g': Filters.text & ~Filters.command}
 
+def user_g(users_ctx, **kwargs):
+    return echo_for_meeting(users_ctx=users_ctx, **kwargs)
 
 def echo(update: Update, context: CallbackContext) -> None:
     """Ехо-відповідь користувачу"""
