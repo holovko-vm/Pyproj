@@ -1,8 +1,9 @@
 from command_functions import command_functions_list
-from message_functions import message_functions_dict
-import message_functions
+# from message_functions import message_functions_dict
+# import message_functions
 import command_functions
 import logging
+from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
 
@@ -20,6 +21,7 @@ class My_tg_bot:
         self.dispatcher = self.updater.dispatcher
         self.users_ctx = {'user_state': 0, 'user_handler':0}
 # TODO прописати стейти для кожного користувача по його ід
+    
 
     def add_command_handlers(self, commands=None):
         """Метод створення обробників згідно списку команд з COMMAND_LIST"""
@@ -43,15 +45,13 @@ class My_tg_bot:
     #                 f'Невідома функція - {message_function}, додайте її до файлу bot_commands.py')
 
     def add_message_handlers(self, message_handlers=None):
-        for message_function, filter in message_handlers.items():
-            try:
-                self.dispatcher.\
-                    add_handler(MessageHandler(filter, getattr(
-                        message_functions, message_function)(users_ctx=self.users_ctx)
-                    ))
-            except AttributeError:
-                logging.error(
-                    f'Невідома функція - {message_function}, додайте її до файлу bot_commands.py')
+       
+        try:
+            self.dispatcher.\
+                add_handler(MessageHandler(Filters.text & ~Filters.command, user_g(users_ctx=self.users_ctx)))
+        except AttributeError:
+            logging.error(
+                f'Невідома функція - , додайте її до файлу bot_commands.py')
 
     def run(self, command_handlers=None, message_handlers=None):
         """Створюємо обробників"""
@@ -60,3 +60,16 @@ class My_tg_bot:
         """Слухаємо сервер"""
         self.updater.start_polling()
         self.updater.idle()
+
+
+def echo(update,context,givno):
+    """Ехо-відповідь користувачу"""
+    return update.message.reply_text(update.message.text)
+    
+def user_g(users_ctx, **kwargs):  
+    def user_g(update= Update, context= CallbackContext, user_ctx=users_ctx, *args, **kwargs):
+        print('я тута')
+        print(user_ctx)
+        echo(update=update, context=context, givno=1)
+        print('і тута')
+    return user_g

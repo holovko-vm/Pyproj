@@ -5,11 +5,10 @@ import re
 '''фільтри для хендлерів знаходяться в модулі {Filters}'''
 message_functions_dict = {'user_g': Filters.text & ~Filters.command}
 
+
 def user_g(users_ctx, **kwargs):
     if users_ctx['user_handler']==0:
         return echo_for_meeting(users_ctx=users_ctx, **kwargs)
-    if users_ctx['user_handler']==1:
-        return echo(users_ctx=users_ctx, **kwargs)
 
 def echo(users_ctx, **kwargs):
     def echo(update: Update, context: CallbackContext) -> None:
