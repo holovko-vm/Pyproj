@@ -2,16 +2,7 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 import re
 
-'''фільтри для хендлерів знаходяться в модулі {Filters}'''
-message_functions_dict = {'user_message_handler': Filters.text & ~Filters.command}
 
-def echo(update,context,givno):
-    """Ехо-відповідь користувачу"""
-    return update.message.reply_text(update.message.text)
-def echo_2(update,context):
-    """Ехо-відповідь користувачу"""
-    return update.message.reply_text('ха-ха бидлокод, моя взяла')
-    
 def user_message_handler(users_ctx, **kwargs):
     re_email = re.compile('^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$')
     password = None
@@ -24,10 +15,10 @@ def user_message_handler(users_ctx, **kwargs):
             echo_for_meeting(users_ctx, update, context, re_email)
     return user_message_handler
 
+def echo(update,context,givno):
+    """Ехо-відповідь користувачу"""
+    return update.message.reply_text(update.message.text)
 
-    
-
-    
 def echo_for_meeting(users_ctx, update: Update, context: CallbackContext, re_email) -> None:
     if users_ctx['user_state'] == 0:
         _date = '15 квітня'
@@ -47,8 +38,7 @@ def echo_for_meeting(users_ctx, update: Update, context: CallbackContext, re_ema
         for _ in _INTENT:
             for token in _['tokens']:
                 if token in str.lower(update.message.text):
-                    return update.message.reply_text(_['answer'])
-                    
+                    return update.message.reply_text(_['answer'])          
         else:
             return update.message.reply_text(DEFAULT_ANSWER)
     if users_ctx['user_state'] == 1:

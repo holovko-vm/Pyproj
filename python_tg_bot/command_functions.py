@@ -4,7 +4,7 @@ import re
 
 regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
 
-command_functions_list = ['kill', 'commands', 'registration', 'out','probe']
+command_functions_list = ['kill', 'commands', 'registration', 'out','switch']
 
 
 def commands(**kwargs):
@@ -45,8 +45,13 @@ def out(users_ctx, **kwargs):
     return out
 
 
-def probe(users_ctx, **kwargs):
-    def probe(update: Update, context: CallbackContext) -> None:
+def switch(users_ctx, **kwargs):
+
+    def switch(update: Update, context: CallbackContext) -> None:
+        if users_ctx['user_handler'] == 1:
+            users_ctx['user_handler'] = 0
+            update.message.reply_text('перемкнулось')
+            return
         users_ctx['user_handler'] = 1
-        update.message.reply_text('Ура, перемкнулось')
-    return probe
+        update.message.reply_text('перемкнулось')
+    return switch

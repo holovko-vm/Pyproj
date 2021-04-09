@@ -1,5 +1,4 @@
 from command_functions import command_functions_list
-from message_functions import message_functions_dict
 import message_functions
 import command_functions
 import logging
@@ -21,7 +20,6 @@ class My_tg_bot:
         self.users_ctx = {'user_state': 0, 'user_handler':0}
 # TODO прописати стейти для кожного користувача по його ід
     
-
     def add_command_handlers(self, commands=None):
         """Метод створення обробників згідно списку команд з COMMAND_LIST"""
         for command in commands:
@@ -32,30 +30,19 @@ class My_tg_bot:
                 logging.error(
                     f'Невідома функція - {command}, додайте її до файлу bot_commands.py')
 
-    # def add_message_handlers(self, message_handlers=None):
-    #     for message_function, filter in message_handlers.items():
-    #         try:
-    #             self.dispatcher.\
-    #                 add_handler(MessageHandler(filter, getattr(
-    #                     message_functions, message_function)(users_ctx=self.users_ctx)
-    #                 ))
-    #         except AttributeError:
-    #             logging.error(
-    #                 f'Невідома функція - {message_function}, додайте її до файлу bot_commands.py')
+    def add_message_handlers(self):
+        '''фільтри для хендлерів знаходяться в модулі {Filters}'''
+        filter = Filters.text & ~Filters.command
+        try:
+            self.dispatcher.\
+                add_handler(MessageHandler\
+                    (filter, message_functions.user_message_handler(users_ctx=self.users_ctx)))
+        except Exception as ecx:
+            logging.error(f'Помилка -{ecx}')
 
-    def add_message_handlers(self, message_handlers=None):
-        for message_function, filter in message_handlers.items():
-            try:
-                self.dispatcher.\
-                    add_handler(MessageHandler\
-                        (filter, message_functions.user_message_handler(users_ctx=self.users_ctx)))
-            except AttributeError:
-                logging.error(
-                    f'Невідома функція - , додайте її до файлу bot_commands.py')
-
-    def run(self, command_handlers=None, message_handlers=None):
+    def run(self, command_handlers=None):
         """Створюємо обробників"""
-        self.add_message_handlers(message_handlers)
+        self.add_message_handlers()
         self.add_command_handlers(command_handlers)
         """Слухаємо сервер"""
         self.updater.start_polling()
