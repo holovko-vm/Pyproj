@@ -2,20 +2,17 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 import re
 
-
 def user_message_handler(users_ctx, **kwargs):
     re_email = re.compile('^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$')
-    password = None
-    user_email = None
     def user_message_handler(update=Update, context=CallbackContext,
      users_ctx=users_ctx, re_email=re_email, *args, **kwargs):
         if users_ctx['user_handler']==1:
-            echo(update=update, context=context, givno=1)
+            echo(update=update, context=context)
         if users_ctx['user_handler']==0:
             echo_for_meeting(users_ctx, update, context, re_email)
     return user_message_handler
 
-def echo(update,context,givno):
+def echo(update,context):
     """Ехо-відповідь користувачу"""
     return update.message.reply_text(update.message.text)
 
