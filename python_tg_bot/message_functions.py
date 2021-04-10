@@ -4,12 +4,15 @@ import re
 
 def user_message_handler(users_ctx, **kwargs):
     re_email = re.compile('^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$')
+    re_url = re.compile(r"((https?):((//)|(\\\\))+[\w\d:#@%/;$()~_?\+-=\\\.&]*)")
     def user_message_handler(update=Update, context=CallbackContext,
      users_ctx=users_ctx, re_email=re_email, *args, **kwargs):
         if users_ctx['user_handler']==1:
             echo(update=update, context=context)
-        if users_ctx['user_handler']==0:
+        if users_ctx['user_handler']==2:
             echo_for_meeting(users_ctx, update, context, re_email)
+        if users_ctx['user_handler']==0:
+            site_info(update=update, context=context, re_url=re_url)
     return user_message_handler
 
 def echo(update,context):
@@ -23,7 +26,7 @@ def echo_for_meeting(users_ctx, update: Update, context: CallbackContext, re_ema
         _location = 'Виставковому центрі, павільйон 1А'
         _INTENT = [
             {'name': 'Дата проведення',
-                'tokens': ('коли', "котра", "о котрій", "дату", "дата"),
+                'tokens': ('коли', "котра", "о котрій", "дат"),
                 'answer': f'Конференція відбудеться {_date}, регістрація починається о {_time}'
                 },
             {'name': 'Місце проведення',
@@ -70,3 +73,7 @@ def echo_for_meeting(users_ctx, update: Update, context: CallbackContext, re_ema
             users_ctx['user_state'] = 2
             return update.message.reply_text(
                 'Некоректний повторний пароль.\nВведіть password')
+
+def site_info(update,context,re_url):
+    if re_url.search(update.message.text):
+        

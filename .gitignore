@@ -1,5 +1,4 @@
 venv
-probe.py
 token_bot.py
 tg_bot.log
 data_base.txt
