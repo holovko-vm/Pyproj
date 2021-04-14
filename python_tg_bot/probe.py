@@ -27,20 +27,19 @@ target_site = 'www.youtube.com'
 target_site_str = f'{target_site}'
 response = requests.get('https://www.wunderground.com/weather/IKYIV366')
 
-# formula = (value - 32)/1.8
+# formula = (value - 32)/1.8 'd:\\image.svg'
 #  {'class':'wu-value wu-value-to'}
 if response.status_code ==200:
   html_doc = BeautifulSoup(response.text, features='html.parser')
-  list_of = html_doc.find_all('span', {'class':'wu-value wu-value-to'})
-  i=0
-  for tag in list_of:
+  list_of_weather = html_doc.find_all('img', {'alt':'icon'})
+  i = 0
+  for tag in list_of_weather:
     i+=1
-    if i ==2:
-      print(tag)
-      tag = str(tag)
-      value = int(tag[-9:-7])
-      gradus = (value - 32)/1.8
-      real_gradus = round(gradus, 1)
-      print(real_gradus)
+    if i == 2:
+      link =tag.attrs['src']
+      img = requests.get("http://www.wunderground.com/static/i/c/v4/33.svg")
+      img_file = open('python_tg_bot\\img.svg','wb')
+      img_file.write(img.content)
+      img_file.close()
       
     

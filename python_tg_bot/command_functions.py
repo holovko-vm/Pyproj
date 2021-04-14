@@ -64,16 +64,32 @@ def weather(users_ctx, **kwargs):
         response = requests.get('https://www.wunderground.com/weather/IKYIV366')
         if response.status_code ==200:
             html_doc = BeautifulSoup(response.text, features='html.parser')
-            list_of = html_doc.find_all('span', {'class':'wu-value wu-value-to'})
-            i=0
-            for tag in list_of:
-                i+=1
-                if i == 2:
-                    tag = str(tag)
-                    value = int(tag[-9:-7])
+            list_of_temperature = html_doc.find_all('span', {'class':'wu-value wu-value-to'})
+            list_of_weather = html_doc.find_all('img', {'alt':'icon'})
+            i1=0
+            i2=0
+            for tag_1 in list_of_temperature:
+                i1+=1
+                if i1 == 2:
+                    tag_1 = str(tag_1)
+                    value = int(tag_1[-9:-7])
                     gradus = (value - 32)/1.8
                     real_gradus = round(gradus, 1)
-                    update.message.reply_text(f'Температура у Києві - {real_gradus} °C')
-                    # TODO присилати якість погоди окрім градусів
+            for tag_2 in list_of_weather:
+                i2+=1
+                if i2 == 2:
+                    link =tag_2.attrs['src']
+                    img = requests.get("http://www.wunderground.com/static/i/c/v4/33.svg")
+                    img_file = open('python_tg_bot\\img.svg','wb')
+                    img_file.write(img.content)
+                    img_file.close()
+                    
+                
+        update.message.reply_text(f'Температура у Києві - {real_gradus} °C')
+        # update.message.reply_document(document='python_tg_bot\\img_2.jpg')
+        # update.message.reply_photo(photo='python_tg_bot\\img_2.jpg')
+        update.message.reply_photo(filename='python_tg_bot\\img_2.jpg')
+        update.message.reply_text(f'Температура у Києві - {real_gradus} °C')
+                    
             
     return weather
