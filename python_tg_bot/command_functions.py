@@ -74,5 +74,6 @@ def weather(users_ctx, **kwargs):
                     gradus = (value - 32)/1.8
                     real_gradus = round(gradus, 1)
                     update.message.reply_text(f'Температура у Києві - {real_gradus} °C')
+                    # TODO присилати якість погоди окрім градусів
             
     return weather
