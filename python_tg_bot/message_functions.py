@@ -73,7 +73,3 @@ def echo_for_meeting(users_ctx, update: Update, context: CallbackContext, re_ema
             users_ctx['user_state'] = 2
             return update.message.reply_text(
                 'Некоректний повторний пароль.\nВведіть password')
-
-def site_info(update,context,re_url):
-    if re_url.search(update.message.text):
-        
