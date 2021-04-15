@@ -1,3 +1,5 @@
+from os.path import join
+
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 import re
@@ -66,30 +68,28 @@ def weather(users_ctx, **kwargs):
             html_doc = BeautifulSoup(response.text, features='html.parser')
             list_of_temperature = html_doc.find_all('span', {'class':'wu-value wu-value-to'})
             list_of_weather = html_doc.find_all('img', {'alt':'icon'})
-            i1=0
-            i2=0
-            for tag_1 in list_of_temperature:
-                i1+=1
-                if i1 == 2:
-                    tag_1 = str(tag_1)
-                    value = int(tag_1[-9:-7])
-                    gradus = (value - 32)/1.8
-                    real_gradus = round(gradus, 1)
-            for tag_2 in list_of_weather:
-                i2+=1
-                if i2 == 2:
-                    link =tag_2.attrs['src']
-                    img = requests.get("http://www.wunderground.com/static/i/c/v4/33.svg")
-                    img_file = open('python_tg_bot\\img.svg','wb')
-                    img_file.write(img.content)
-                    img_file.close()
-                    
-                
-        update.message.reply_text(f'Температура у Києві - {real_gradus} °C')
-        # update.message.reply_document(document='python_tg_bot\\img_2.jpg')
-        # update.message.reply_photo(photo='python_tg_bot\\img_2.jpg')
-        update.message.reply_photo(filename='python_tg_bot\\img_2.jpg')
-        update.message.reply_text(f'Температура у Києві - {real_gradus} °C')
-                    
-            
+            tag_1=list_of_temperature[1]
+            value =int(tag_1.get_text())
+            gradus = (value - 32)/1.8
+            real_gradus = round(gradus, 1)
+            tag_2 = list_of_weather[1]
+            link =tag_2.attrs['src']
+            img = requests.get("http://www.wunderground.com/static/i/c/v4/33.svg")
+            img_file = open('python_tg_bot\\img.svg','wb')
+            img_file.write(img.content)
+            img_file.close()   
+            try:
+                import pyvips
+                image_weather_prev = join('python_tg_bot','img.svg')
+                image_weather_out = join('python_tg_bot','weather.png')
+                image = pyvips.Image.thumbnail(image_weather_prev, 75, height=75)
+                image.write_to_file(image_weather_out)
+                image_weather = open(join('python_tg_bot','weather.png'),"rb")
+                update.message.reply_photo(photo=image_weather)
+            except Exception:
+                image_weather_fault = open(join('python_tg_bot','img.svg'),"rb")
+                update.message.reply_document(document=image_weather_fault)
+                update.message.reply_text('Lest install pyvips, if you want to see photo')
+            update.message.reply_text(f'Температура у Києві - {real_gradus} °C')
+             
     return weather
