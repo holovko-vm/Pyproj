@@ -1,6 +1,7 @@
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 import re
+import pymysql.cursors
 
 def user_message_handler(users_ctx, **kwargs):
     re_email = re.compile('^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$')
@@ -9,10 +10,9 @@ def user_message_handler(users_ctx, **kwargs):
      users_ctx=users_ctx, re_email=re_email, *args, **kwargs):
         if users_ctx['user_handler']==1:
             echo(update=update, context=context)
-        if users_ctx['user_handler']==2:
-            echo_for_meeting(users_ctx, update, context, re_email)
         if users_ctx['user_handler']==0:
-            site_info(update=update, context=context, re_url=re_url)
+            echo_for_meeting(users_ctx, update, context, re_email)
+
     return user_message_handler
 
 def echo(update,context):
@@ -59,14 +59,18 @@ def echo_for_meeting(users_ctx, update: Update, context: CallbackContext, re_ema
     elif users_ctx['user_state'] == 3:
         if update.message.text == users_ctx['probe_pass']:
             users_ctx['password'] = update.message.text
-            with open(file='python_tg_bot\\data_base.txt', mode='a', encoding='utf-8') as file:
-                for key, item in users_ctx.items():
-                    if key == 'user_email':
-                        file.write(item)
-                        file.write(' : ')
-                    if key == 'password':
-                        file.write(item)
-                        file.write(' , ')
+            connection = pymysql.connect(host='localhost',
+                             user='root',
+                             password='19951977',
+                             database='mypythondata',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
+# update.message.from_user['id']
+            with connection:
+                with connection.cursor() as cursor:
+                    sql = "INSERT INTO `registration_info` (`user_email`, `user_password`, `user_state`) VALUES (%s, %s, %s)"
+                    cursor.execute(sql, (users_ctx['user_email'], users_ctx['password'], 0))
+                connection.commit()
             users_ctx['user_state'] = 0
             return update.message.reply_text('Реєстрація успішна!')
         else:

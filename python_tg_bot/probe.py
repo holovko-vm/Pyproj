@@ -3,7 +3,47 @@ from bs4 import BeautifulSoup
 import json
 from os.path import join
 import pyvips
+import pymysql.cursors
 
+
+
+gsdjg = {'asasd': {'user_1': 5}}
+
+print(gsdjg['asasd'])
+print(gsdjg['asasd']['user_1'])
+
+
+
+
+# connection = pymysql.connect(host='localhost',
+#                              user='root',
+#                              password='19951977',
+#                              database='mypythondata',
+#                              charset='utf8mb4',
+#                              cursorclass=pymysql.cursors.DictCursor)
+# with connection:
+#     with connection.cursor() as cursor:
+        
+#         sql = "INSERT INTO `probe` (`user_email`, `user_password`, `user_state`) VALUES (%s, %s, %s)"
+#         cursor.execute(sql, ('webmaster@python.org', 'very-secret', '1'))
+#     connection.commit()
+
+    # with connection.cursor() as cursor:
+    #     # Read a single record
+    #     sql = "SELECT `id`, `password` FROM `users` WHERE `email`=%s"
+    #     cursor.execute(sql, ('webmaster@python.org',))
+    #     result = cursor.fetchone()
+    #     print(result)
+# connecting = pymysql.connect(user = 'root', password = '19951977', database = 'mypythondata')
+
+# with connecting:
+#     with connecting.cursor() as cursor:
+#         sql = "Show tables"
+#         kin = cursor.execute(sql)
+#         print(kin)
+
+
+# connect('C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Data\\mypythondata\\registration_info.ibd')
 
 # # target_site = 'www.youtube.com'
 # # target_site_str = f'{target_site}'
