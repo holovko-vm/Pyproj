@@ -2,6 +2,7 @@ from command_functions import command_functions_list
 import message_functions
 import command_functions
 import logging
+from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
 
@@ -17,7 +18,7 @@ class My_tg_bot:
         self.updater = Updater(token=token)
         """Створюємо Об'єкт, який направляє новину відповідному обробнику"""
         self.dispatcher = self.updater.dispatcher
-        self.users_ctx = {'user_state': 0, 'user_handler':0}
+        self.users_ctx = {'user_state': {'user':0}, 'user_handler':0}
 # TODO прописати стейти для кожного користувача по його ід
     
     def add_command_handlers(self, commands=None):
@@ -37,8 +38,8 @@ class My_tg_bot:
             self.dispatcher.\
                 add_handler(MessageHandler\
                     (filter, message_functions.user_message_handler(users_ctx=self.users_ctx)))
-        except Exception as ecx:
-            logging.error(f'Помилка -{ecx}')
+        except Exception as exc:
+            logging.error(f'Помилка -{exc}')
 
     def run(self, command_handlers=None):
         """Створюємо обробників"""

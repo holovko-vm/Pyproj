@@ -35,7 +35,7 @@ def kill(**kwargs):
 def registration(users_ctx, **kwargs):
 
     def registration(update: Update, context: CallbackContext) -> None:
-        users_ctx['user_state'] = 1
+        users_ctx['user_state']['user'] = 1
         update.message.reply_text('Процедуру реєстрації запущено,'+
         'для виходу з реєстрації, скористайтесь командою /out')
         update.message.reply_text('Для продовження реєстрації введіть email')
@@ -44,7 +44,7 @@ def registration(users_ctx, **kwargs):
 def out(users_ctx, **kwargs):
 
     def out(update: Update, context: CallbackContext) -> None:
-        users_ctx['user_state'] = 0
+        users_ctx['user_state']['user'] = 0
         update.message.reply_text('Реєстрацію відмінено!')
     return out
 
