@@ -76,8 +76,8 @@ def echo_for_meeting(users_ctx, update: Update, context: CallbackContext, re_ema
 # update.message.from_user['id']
             with connection:
                 with connection.cursor() as cursor:
-                    sql = "INSERT INTO `registration_info` (`user_email`, `user_password`, `user_state`) VALUES (%s, %s, %s)"
-                    cursor.execute(sql, (users_ctx['user_email'], users_ctx['password'], 0))
+                    sql = "REPLACE INTO `registration_info` (`user_email`, `user_password`, `user_state`) VALUES (%s, %s, %s)"
+                    cursor.execute(sql, (users_ctx['user_email'], users_ctx['password'], users_ctx['user_state'][update.message.from_user['id']]))
                 connection.commit()
             users_ctx['user_state']['user'] = 0
             print(users_ctx['user_state'][update.message.from_user['id']])
