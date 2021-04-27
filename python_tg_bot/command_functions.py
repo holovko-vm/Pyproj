@@ -35,7 +35,7 @@ def kill(**kwargs):
 def registration(users_ctx, **kwargs):
 
     def registration(update: Update, context: CallbackContext) -> None:
-        users_ctx['user_state']['user'] = 1
+        users_ctx['user_state'][update.message.from_user['id']] = 1
         update.message.reply_text('Процедуру реєстрації запущено,'+
         'для виходу з реєстрації, скористайтесь командою /out')
         update.message.reply_text('Для продовження реєстрації введіть email')

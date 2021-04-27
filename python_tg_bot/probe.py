@@ -6,12 +6,26 @@ import pyvips
 import pymysql.cursors
 
 
+afasf = {}
 
-gsdjg = {'asasd': {'user_1': 5}}
 
-print(gsdjg['asasd'])
-print(gsdjg['asasd']['user_1'])
+if afasf['0'] is None:
+    print('asdaf')
+else:
+    print('asdwcx')
 
+
+# gsdjg = {'asasd': {'user_1': {'asd':5}}}
+
+# # print(gsdjg['asasd'])
+# # print(gsdjg['asasd']['user_1'])
+# print(*gsdjg['asasd']['user_1'])
+# # def rakov(**kwargs):
+#     print(kwargs)
+#     print(*kwargs)
+#     print(**kwargs)
+    
+# rakov(**kwargs=gsdjg)
 
 
 

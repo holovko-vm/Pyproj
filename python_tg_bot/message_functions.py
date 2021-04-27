@@ -8,11 +8,16 @@ def user_message_handler(users_ctx, **kwargs):
     re_url = re.compile(r"((https?):((//)|(\\\\))+[\w\d:#@%/;$()~_?\+-=\\\.&]*)")
     def user_message_handler(update=Update, context=CallbackContext,
      users_ctx=users_ctx, re_email=re_email, *args, **kwargs):
-        users_ctx['user_state'][update.message.from_user['id']] = 0
+        connection = pymysql.connect(host='localhost',
+                             user='root',
+                             password='19951977',
+                             database='mypythondata',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
         if users_ctx['user_handler']==1:
             echo(update=update, context=context)
         if users_ctx['user_handler']==0:
-            echo_for_meeting(users_ctx, update, context, re_email)
+            echo_for_meeting(users_ctx, update, context, re_email, connection)
 
     return user_message_handler
 
@@ -20,9 +25,13 @@ def echo(update,context):
     """Ехо-відповідь користувачу"""
     return update.message.reply_text(update.message.text)
 
-def echo_for_meeting(users_ctx, update: Update, context: CallbackContext, re_email) -> None:
-    print(users_ctx['user_state'][update.message.from_user['id']])
-    if users_ctx['user_state']['user'] == 0:
+def echo_for_meeting(users_ctx, update: Update, context: CallbackContext, re_email, connection) -> None:
+    try:
+        if users_ctx['user_state'][update.message.from_user['id']]:
+            pass
+    except KeyError:
+        users_ctx['user_state'][update.message.from_user['id']] = 0
+    if users_ctx['user_state'][update.message.from_user['id']] == 0:
         _date = '15 квітня'
         _time = '10 ранку'
         _location = 'Виставковому центрі, павільйон 1А'
@@ -43,47 +52,37 @@ def echo_for_meeting(users_ctx, update: Update, context: CallbackContext, re_ema
                     return update.message.reply_text(_['answer'])          
         else:
             return update.message.reply_text(DEFAULT_ANSWER)
-    if users_ctx['user_state']['user'] == 1:
+        
+        
+        
+    if users_ctx['user_state'][update.message.from_user['id']] == 1:
         if re_email.search(update.message.text):
-            print(users_ctx['user_state'][update.message.from_user['id']])
             users_ctx['user_email']= update.message.text
-            users_ctx['user_state']['user'] = 2
-            users_ctx['user_state'][update.message.from_user['id']] = 1
+            users_ctx['user_state'][update.message.from_user['id']] = 2
             return update.message.reply_text('Введіть password')
         else:
-            users_ctx['user_state']['user'] = 1
-            print(users_ctx['user_state'][update.message.from_user['id']])
-            users_ctx['user_state'][update.message.from_user['id']]=2
+            users_ctx['user_state'][update.message.from_user['id']]=1
             return update.message.reply_text('Введіть коректний email')
-    elif users_ctx['user_state']['user'] == 2:
+        
+    elif users_ctx['user_state'][update.message.from_user['id']] == 2:
         if len(update.message.text) >= 8:
             users_ctx['probe_pass'] = update.message.text
-            users_ctx['user_state']['user'] = 3
-            print(users_ctx['user_state'][update.message.from_user['id']])
-            users_ctx['user_state'][update.message.from_user['id']]=4
+            users_ctx['user_state'][update.message.from_user['id']]=3
             return update.message.reply_text('Підтвердіть password')
         else:
             return update.message.reply_text('Пароль повинен бути більше 8 літер')
-    elif users_ctx['user_state']['user'] == 3:
+        
+    elif users_ctx['user_state'][update.message.from_user['id']] == 3:
         if update.message.text == users_ctx['probe_pass']:
             users_ctx['password'] = update.message.text
-            connection = pymysql.connect(host='localhost',
-                             user='root',
-                             password='19951977',
-                             database='mypythondata',
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
-# update.message.from_user['id']
+            users_ctx['user_state'][update.message.from_user['id']] = 0
             with connection:
                 with connection.cursor() as cursor:
                     sql = "REPLACE INTO `registration_info` (`user_email`, `user_password`, `user_state`) VALUES (%s, %s, %s)"
                     cursor.execute(sql, (users_ctx['user_email'], users_ctx['password'], users_ctx['user_state'][update.message.from_user['id']]))
                 connection.commit()
-            users_ctx['user_state']['user'] = 0
-            print(users_ctx['user_state'][update.message.from_user['id']])
-            users_ctx['user_state'][update.message.from_user['id']] =5
             return update.message.reply_text('Реєстрація успішна!')
         else:
-            users_ctx['user_state']['user'] = 2
+            users_ctx['user_state'][update.message.from_user['id']] = 2
             return update.message.reply_text(
                 'Некоректний повторний пароль.\nВведіть password')
