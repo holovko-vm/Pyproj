@@ -14,10 +14,17 @@ def user_message_handler(users_ctx, **kwargs):
                              database='mypythondata',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
-        if users_ctx['user_handler']==1:
+        try:
+            if users_ctx['user_handler'][update.message.from_user['id']]:
+                pass
+        except KeyError:
+            users_ctx['user_handler'][update.message.from_user['id']]=0 
+            
+        if users_ctx['user_handler'][update.message.from_user['id']]==0:
+            echo_for_meeting(users_ctx, update, context, re_email, connection)     
+        if users_ctx['user_handler'][update.message.from_user['id']]==1:
             echo(update=update, context=context)
-        if users_ctx['user_handler']==0:
-            echo_for_meeting(users_ctx, update, context, re_email, connection)
+        
 
     return user_message_handler
 

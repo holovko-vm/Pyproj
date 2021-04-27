@@ -29,7 +29,6 @@ def kill(**kwargs):
                 f'We will kill {update.message.text[6:]} for you')
     return kill
 
-    user_state = 0
 
 
 def registration(users_ctx, **kwargs):
@@ -44,7 +43,7 @@ def registration(users_ctx, **kwargs):
 def out(users_ctx, **kwargs):
 
     def out(update: Update, context: CallbackContext) -> None:
-        users_ctx['user_state']['user'] = 0
+        users_ctx['user_state'][update.message.from_user['id']] = 0
         update.message.reply_text('Реєстрацію відмінено!')
     return out
 
@@ -52,11 +51,11 @@ def out(users_ctx, **kwargs):
 def switch(users_ctx, **kwargs):
 
     def switch(update: Update, context: CallbackContext) -> None:
-        if users_ctx['user_handler'] == 1:
-            users_ctx['user_handler'] = 0
+        if users_ctx['user_handler'][update.message.from_user['id']] == 1:
+            users_ctx['user_handler'][update.message.from_user['id']] = 0
             update.message.reply_text('перемкнулось')
             return
-        users_ctx['user_handler'] = 1
+        users_ctx['user_handler'][update.message.from_user['id']] = 1
         update.message.reply_text('перемкнулось')
     return switch
 
