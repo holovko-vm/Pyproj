@@ -85,8 +85,10 @@ def echo_for_meeting(users_ctx, update: Update, context: CallbackContext, re_ema
             users_ctx['user_state'][update.message.from_user['id']] = 0
             with connection:
                 with connection.cursor() as cursor:
-                    sql = "REPLACE INTO `registration_info` (`user_email`, `user_password`, `user_state`) VALUES (%s, %s, %s)"
-                    cursor.execute(sql, (users_ctx['user_email'], users_ctx['password'], users_ctx['user_state'][update.message.from_user['id']]))
+                    table = "CREATE TABLE IF NOT EXISTS `registration_info`(user_id INT PRIMARY KEY NOT NULL, user_email VARCHAR(30) NOT NULL, user_password VARCHAR(30) NOT NULL)"
+                    cursor.execute(table)
+                    reg = "REPLACE INTO `registration_info` (`user_id`,`user_email`, `user_password`) VALUES (%s,%s, %s)"
+                    cursor.execute(reg, (update.message.from_user['id'],users_ctx['user_email'], users_ctx['password']))
                 connection.commit()
             return update.message.reply_text('Реєстрація успішна!')
         else:
