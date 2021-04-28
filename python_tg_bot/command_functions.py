@@ -51,6 +51,11 @@ def out(users_ctx, **kwargs):
 def switch(users_ctx, **kwargs):
 
     def switch(update: Update, context: CallbackContext) -> None:
+        try:
+            if users_ctx['user_handler'][update.message.from_user['id']]:
+                pass
+        except KeyError:
+            users_ctx['user_handler'][update.message.from_user['id']]=0
         if users_ctx['user_handler'][update.message.from_user['id']] == 1:
             users_ctx['user_handler'][update.message.from_user['id']] = 0
             update.message.reply_text('перемкнулось')

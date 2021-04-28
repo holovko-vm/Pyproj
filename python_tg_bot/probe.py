@@ -2,17 +2,22 @@ import requests
 from bs4 import BeautifulSoup
 import json
 from os.path import join
-import pyvips
+
 import pymysql.cursors
 
 
 afasf = {}
+try:
+    y = afasf['0']
+except KeyError:
+    afasf['0'] = 0
+    y = afasf['0']
+    print(y)
+    y = 2
+    print(y)
+    print(afasf['0'])
 
-
-if afasf['0'] is None:
-    print('asdaf')
-else:
-    print('asdwcx')
+    
 
 
 # gsdjg = {'asasd': {'user_1': {'asd':5}}}
