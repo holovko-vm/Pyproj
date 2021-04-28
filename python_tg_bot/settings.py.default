@@ -1,0 +1,10 @@
+
+token = "token your bot"
+
+database = {
+'host' : 'host your database',
+'database' : 'name of your database',
+'user' : 'user of your database',
+'password' : 'password of your database',
+'charset' : 'encoding of your database' 
+}

@@ -1,7 +1,7 @@
 venv
-token_bot.py
+settings.py
 tg_bot.log
-data_base.txt
+
 __pycache__
 .coverage
 htmlcov

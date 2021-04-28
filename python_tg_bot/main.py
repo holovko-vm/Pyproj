@@ -7,7 +7,7 @@ logging.basicConfig(
 )
 
 if __name__ == '__main__':
-    from token_bot import token
+    from settings import token
     from tg_bot import My_tg_bot
     from command_functions import command_functions_list
     logging.info("start")

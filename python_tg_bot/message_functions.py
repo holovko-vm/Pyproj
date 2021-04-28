@@ -2,17 +2,18 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 import re
 import pymysql.cursors
+from settings import database
 
 def user_message_handler(users_ctx, **kwargs):
     re_email = re.compile('^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$')
     re_url = re.compile(r"((https?):((//)|(\\\\))+[\w\d:#@%/;$()~_?\+-=\\\.&]*)")
     def user_message_handler(update=Update, context=CallbackContext,
      users_ctx=users_ctx, re_email=re_email, *args, **kwargs):
-        connection = pymysql.connect(host='localhost',
-                             user='root',
-                             password='19951977',
-                             database='mypythondata',
-                             charset='utf8mb4',
+        connection = pymysql.connect(host=database['host'],
+                             user=database['user'],
+                             password=database['password'],
+                             database=database['database'],
+                             charset=database['charset'],
                              cursorclass=pymysql.cursors.DictCursor)
         try:
             if users_ctx['user_handler'][update.message.from_user['id']]:
