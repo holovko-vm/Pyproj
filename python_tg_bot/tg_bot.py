@@ -21,9 +21,9 @@ class My_tg_bot:
         self.users_ctx = {'user_state': {}, 'user_handler':{}}
 # TODO прописати стейти для кожного користувача по його ід
     
-    def add_command_handlers(self, commands=None):
+    def add_command_handlers(self, command_handlers=None):
         """Метод створення обробників згідно списку команд з COMMAND_LIST"""
-        for command in commands:
+        for command in command_handlers:
             try:
                 self.dispatcher.add_handler(CommandHandler(
                     command, getattr(command_functions, command)(users_ctx=self.users_ctx)))
