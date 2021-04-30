@@ -7,6 +7,7 @@ from command_functions import command_functions_list
 
 class Test(TestCase):
     def test_run_add_all_handlers(self):
+        """Перевіряє додавання всіх обробників, включно з обробником повідомлень та запуск бота"""
         with patch('tg_bot.Updater'):
             bot = My_tg_bot('')
             bot.dispatcher.add_handler = Mock()

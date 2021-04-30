@@ -1,6 +1,7 @@
-
+"""Вставте токен Вашого бота сюди"""
 token = "token your bot"
 
+"""Вставте інформацію про Вашу БД сюди"""
 database = {
 'host' : 'host your database',
 'database' : 'name of your database',

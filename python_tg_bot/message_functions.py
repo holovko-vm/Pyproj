@@ -5,22 +5,30 @@ import pymysql.cursors
 from settings import database
 
 def user_message_handler(users_ctx, **kwargs):
+    """Обробник повідомлень, визначає функції, 
+    що використовуються для обробки повідомлень та умови, за яких вони обираються"""
     re_email = re.compile('^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$')
     re_url = re.compile(r"((https?):((//)|(\\\\))+[\w\d:#@%/;$()~_?\+-=\\\.&]*)")
     def user_message_handler(update=Update, context=CallbackContext,
      users_ctx=users_ctx, re_email=re_email, *args, **kwargs):
-        connection = pymysql.connect(host=database['host'],
-                             user=database['user'],
-                             password=database['password'],
-                             database=database['database'],
-                             charset=database['charset'],
-                             cursorclass=pymysql.cursors.DictCursor)
         try:
+            connection = pymysql.connect(host=database['host'],
+                                user=database['user'],
+                                password=database['password'],
+                                database=database['database'],
+                                charset=database['charset'],
+                                cursorclass=pymysql.cursors.DictCursor)
+        except Exception as ecx:
+            print(f'No database - {ecx}')
+        try:
+            """Оскільки при запуску бота невідомо, від якого користувача надійде повідомлення, 
+            цей блок відповідає за створення контексту конкретного користувача в частині обробника користувача"""
             if users_ctx['user_handler'][update.message.from_user['id']]:
                 pass
         except KeyError:
             users_ctx['user_handler'][update.message.from_user['id']]=0 
-            
+
+        """Умови для вибору функції обробки повідомлень, задаються тут"""   
         if users_ctx['user_handler'][update.message.from_user['id']]==0:
             echo_for_meeting(users_ctx, update, context, re_email, connection)     
         if users_ctx['user_handler'][update.message.from_user['id']]==1:
@@ -34,12 +42,18 @@ def echo(update,context):
     return update.message.reply_text(update.message.text)
 
 def echo_for_meeting(users_ctx, update: Update, context: CallbackContext, re_email, connection) -> None:
+    """Функція для організації івенту, надання інформації та реєстрації"""
     try:
+        """Оскільки при запуску бота невідомо, від якого користувача надійде повідомлення, 
+            цей блок відповідає за створення контексту конкретного користувача 
+            в частині стану проходження сценарію користувача"""
         if users_ctx['user_state'][update.message.from_user['id']]:
             pass
     except KeyError:
         users_ctx['user_state'][update.message.from_user['id']] = 0
+        
     if users_ctx['user_state'][update.message.from_user['id']] == 0:
+        """Базові відповіді користувачу"""
         _date = '15 квітня'
         _time = '10 ранку'
         _location = 'Виставковому центрі, павільйон 1А'
@@ -64,6 +78,7 @@ def echo_for_meeting(users_ctx, update: Update, context: CallbackContext, re_ema
         
         
     if users_ctx['user_state'][update.message.from_user['id']] == 1:
+        """Сценарій реєстрації, запускається за допомогою команди /registration"""
         if re_email.search(update.message.text):
             users_ctx['user_email']= update.message.text
             users_ctx['user_state'][update.message.from_user['id']] = 2

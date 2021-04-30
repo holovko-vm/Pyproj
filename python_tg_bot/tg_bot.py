@@ -6,33 +6,32 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
 
-"""Список використовуваних ботом функцій """
-'''message_functions_dict, command_functions_list'''
-
-
 class My_tg_bot:
     def __init__(self, token):
         """Створюємо Об'єкт, що слідкує за новинами,
-        Вставте токен Вашого бота token_bot.py.default --> token_bot.py >>token = 'Токен Вашого бота'
+        Вставте токен Вашого бота settings.py.default --> settings.py >> token = 'Токен Вашого бота'
         """
         self.updater = Updater(token=token)
         """Створюємо Об'єкт, який направляє новину відповідному обробнику"""
         self.dispatcher = self.updater.dispatcher
+        """Створюємо метод, який зберігає контекст користувачів
+        (вибраний обробник повідомлень, положення користувача у відповідному сценарії)"""
         self.users_ctx = {'user_state': {}, 'user_handler':{}}
-# TODO прописати стейти для кожного користувача по його ід
     
     def add_command_handlers(self, command_handlers=None):
-        """Метод створення обробників згідно списку команд з COMMAND_LIST"""
+        """Метод для створення обробників команд згідно списку команд
+         з command_functions.command_functions_list"""
         for command in command_handlers:
             try:
                 self.dispatcher.add_handler(CommandHandler(
                     command, getattr(command_functions, command)(users_ctx=self.users_ctx)))
             except AttributeError:
                 logging.error(
-                    f'Невідома функція - {command}, додайте її до файлу bot_commands.py')
+                    f'Невідома функція - {command}, додайте її до файлу command_functions.py')
 
-    def add_message_handlers(self):
-        '''фільтри для хендлерів знаходяться в модулі {Filters}'''
+    def add_message_handler(self):
+        """Метод для створення обробника повідомлень"""
+        """Фільтри для хендлерів знаходяться в модулі {Filters}"""
         filter = Filters.text & ~Filters.command
         try:
             self.dispatcher.\
@@ -43,7 +42,7 @@ class My_tg_bot:
 
     def run(self, command_handlers=None):
         """Створюємо обробників"""
-        self.add_message_handlers()
+        self.add_message_handler()
         self.add_command_handlers(command_handlers)
         """Слухаємо сервер"""
         self.updater.start_polling()

@@ -1,12 +1,11 @@
 from os.path import join
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
-import re
 import requests
 from bs4 import BeautifulSoup
 
-regex = '^(\w|\.|\_|\-)+[@](\w|\_|\-|\.)+[.]\w{2,3}$'
 
+"""Список використовуваних ботом команд"""
 command_functions_list = ['kill', 'commands', 'registration', 'out','switch', 'weather']
 
 
@@ -31,7 +30,7 @@ def kill(**kwargs):
 
 
 def registration(users_ctx, **kwargs):
-
+    """Запускає сценарій реєстрації"""
     def registration(update: Update, context: CallbackContext) -> None:
         users_ctx['user_state'][update.message.from_user['id']] = 1
         update.message.reply_text('Процедуру реєстрації запущено,'+
@@ -40,7 +39,7 @@ def registration(users_ctx, **kwargs):
     return registration
 
 def out(users_ctx, **kwargs):
-
+    """Команда для виходу з процесу реєстрації"""
     def out(update: Update, context: CallbackContext) -> None:
         users_ctx['user_state'][update.message.from_user['id']] = 0
         update.message.reply_text('Реєстрацію відмінено!')
@@ -48,7 +47,7 @@ def out(users_ctx, **kwargs):
 
 
 def switch(users_ctx, **kwargs):
-
+    """Команда для зміни функції обробки повідомлень"""
     def switch(update: Update, context: CallbackContext) -> None:
         try:
             if users_ctx['user_handler'][update.message.from_user['id']]:
@@ -57,14 +56,14 @@ def switch(users_ctx, **kwargs):
             users_ctx['user_handler'][update.message.from_user['id']]=0
         if users_ctx['user_handler'][update.message.from_user['id']] == 1:
             users_ctx['user_handler'][update.message.from_user['id']] = 0
-            update.message.reply_text('перемкнулось')
+            update.message.reply_text('Використовується інша функція обробки повідомлень')
             return
         users_ctx['user_handler'][update.message.from_user['id']] = 1
-        update.message.reply_text('перемкнулось')
+        update.message.reply_text('Використовується інша функція обробки повідомлень')
     return switch
 
 def weather(users_ctx, **kwargs):
-
+    """Команда для отримання поточної погоди у Києві"""
     def weather(update: Update, context: CallbackContext) -> None:
         response = requests.get('https://www.wunderground.com/weather/IKYIV366')
         if response.status_code ==200:
