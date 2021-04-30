@@ -3,6 +3,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Callb
 import re
 import pymysql.cursors
 from settings import database
+import logging
 
 def user_message_handler(users_ctx, **kwargs):
     """Обробник повідомлень, визначає функції, 
@@ -19,7 +20,8 @@ def user_message_handler(users_ctx, **kwargs):
                                 charset=database['charset'],
                                 cursorclass=pymysql.cursors.DictCursor)
         except Exception as ecx:
-            print(f'No database - {ecx}')
+            logging.error(f'No database - {ecx}')
+            
         try:
             """Оскільки при запуску бота невідомо, від якого користувача надійде повідомлення, 
             цей блок відповідає за створення контексту конкретного користувача в частині обробника користувача"""
