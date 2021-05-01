@@ -92,6 +92,6 @@ def weather(users_ctx, **kwargs):
                 image_weather_fault = open(join('python_tg_bot','img.svg'),"rb")
                 update.message.reply_document(document=image_weather_fault)
                 update.message.reply_text('Lest install pyvips, if you want to see photo')
-            update.message.reply_text(f'Температура у Києві - {real_gradus} °C')
+            update.message.reply_text(f'Температура у Києві : {real_gradus} °C')
              
     return weather
