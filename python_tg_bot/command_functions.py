@@ -32,6 +32,7 @@ def kill(**kwargs):
 def registration(users_ctx, **kwargs):
     """Запускає сценарій реєстрації"""
     def registration(update: Update, context: CallbackContext) -> None:
+        users_ctx['user_handler'][update.message.from_user['id']] = 0
         users_ctx['user_state'][update.message.from_user['id']] = 1
         update.message.reply_text('Процедуру реєстрації запущено,'+
         'для виходу з реєстрації, скористайтесь командою /out')
